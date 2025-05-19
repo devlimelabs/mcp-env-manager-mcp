@@ -1,0 +1,52 @@
+# Smithery AI Configuration for MCP Environment Manager
+smithery_version: "1.0"
+
+# Docker configuration
+docker:
+  build:
+    dockerfile: Dockerfile
+    context: .
+  
+# Basic metadata
+metadata:
+  name: mcp-env-manager
+  description: Environment Variable and Package Manager for Model Context Protocol (MCP) servers
+  version: 1.0.0
+  author: DevLime Labs
+  tags:
+    - mcp
+    - environment
+    - configuration
+    - manager
+    - env
+
+# Build configuration
+build:
+  steps:
+    - name: Install dependencies
+      command: pnpm install --frozen-lockfile
+    - name: Build
+      command: pnpm build
+    - name: Test
+      command: pnpm test
+      
+# Runtime configuration
+runtime:
+  command: ["node", "dist/bin/mcp-env-manager.js"]
+  
+# Environment variables (if needed)
+environment:
+  NODE_ENV: production
+  MCP_ENV_STORAGE_DIR: /data
+
+# Resources
+resources:
+  cpu: 256
+  memory: 512
+
+# Health check
+healthcheck:
+  test: ["CMD", "node", "-e", "process.exit(0)"]
+  interval: 30s
+  timeout: 10s
+  retries: 3
